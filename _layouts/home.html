@@ -25,10 +25,30 @@
       </div><!-- /.container-fluid -->
     </nav>
     <div class="container">
-      
+
       {{ content }}
     </div>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script>
+      (function($) {
+          $(document).ready(function() {
+            $('#search').on('keyup', function() {
+              if($(this).val().length == 0) {
+                $('#posts li').show();
+                return;
+              }
+              $('#posts li a').each(function() {
+                if($(this).html().toLowerCase().search($('#search').val().toLowerCase()) > -1) {
+                  $(this).parents('li').show();
+                }
+                else {
+                  $(this).parents('li').hide();
+                }
+              });
+            });
+          });
+      })(jQuery);
+    </script>
   </body>
 </html>

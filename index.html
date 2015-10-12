@@ -4,8 +4,15 @@ layout: home
 <div class="page-header">
   <h1>CSUMB News archive</h1>
 </div>
-
-<ul>
+<div class="well">
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="search">Search </label>
+      <input type="text" class="form-control input-lg" id="search"/>
+    </div>
+  </form>
+</div>
+<ul id="posts">
   {% for post in site.posts %}
     <li>
       <a href="{{ post.url }}">{{ post.title }}</a>
