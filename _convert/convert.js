@@ -3,6 +3,8 @@ var fs = require('fs'),
     walk = require('walk'),
     _ = require('underscore'),
     cheerio = require('cheerio'),
+    moment = require('cheerio'),
+    moment = require('moment'),
     tidy = require('htmltidy').tidy;
 var format = ['---',
   'layout: archive',
@@ -15,6 +17,7 @@ var page = {};
 var walker = walk.walk('.', { followLinks : false });
 walker.on("file", function(root, fileStat, next) {
   if(fileStat.name.search('.html') > -1) {
+    console.log('Runnning ' + fileStat.name);
     fs.readFile(path.resolve(root, fileStat.name), function (err, data) {
       if(!err) {
         tidy(data, function(err, html) {
@@ -25,20 +28,23 @@ walker.on("file", function(root, fileStat, next) {
           }
           var $byline = $('.news-byline');
           $byline.find('a').remove();
-          page = {
-            title : title,
-            content : $('#content').first().html(),
-            date : $byline.html().replace('Posted on ', '')
-          };
-          if(page.content) {
-            pageString = format;
-            _.each(page, function(value, index) {
-              pageString = pageString.replace('{{' + index + '}}', value);
-            });
-            fs.writeFile(path.resolve(root, fileStat.name), pageString, function(err) {
-              console.log('Generated ' + path.resolve(root, fileStat.name));
-            });
+          if($byline.html()) {
+            var postdate = moment($byline.html().replace('Posted on ', ''));
+            page = {
+              title : title,
+              content : $('#content').first().html(),
+              date : postdate.format('MMMM D YYYY')
+            };
+            if(page.content) {
+              pageString = format;
+              _.each(page, function(value, index) {
+                pageString = pageString.replace('{{' + index + '}}', value);
+              });
+              fs.writeFile('_posts/' + postdate.format('YYYY[-]MM[-]DD') + '-' + fileStat.name, pageString, function(err) {
+                console.log('Generated ' + postdate.format('YYYY[-]MM[-]DD') + '-' + fileStat.name);
+              });
 
+            }
           }
         });
       }
