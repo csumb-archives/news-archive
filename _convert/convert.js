@@ -1,5 +1,4 @@
-var config = require('./config'),
-    fs = require('fs'),
+var fs = require('fs'),
     path = require('path'),
     walk = require('walk'),
     _ = require('underscore'),
@@ -20,7 +19,7 @@ walker.on("file", function(root, fileStat, next) {
       if(!err) {
         tidy(data, function(err, html) {
           $ = cheerio.load(html);
-          var title = $(catalog.title).first().html();
+          var title = $('h1.title').first().html();
           if(title) {
             title = title.replace(/:/g, '&#58;').replace(/\//g, ' ').replace(/~/g, '-').replace(/\n/g, ' ').replace(/-/g, '').trim();
           }
@@ -28,9 +27,8 @@ walker.on("file", function(root, fileStat, next) {
           $byline.find('a').remove();
           page = {
             title : title,
-            navigation: $('h1.title').first().html(),
             content : $('#content').first().html(),
-            date : $byline.html()
+            date : $byline.html().replace('Posted on ', '')
           };
           if(page.content) {
             pageString = format;
