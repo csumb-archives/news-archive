@@ -1,6 +1,7 @@
 ---
 layout: home
 ---
+
 <div class="page-header">
   <h1>CSUMB News archive</h1>
 </div>
@@ -8,15 +9,15 @@ layout: home
   <form class="form-inline">
     <div class="form-group">
       <label for="search">Search </label>
-      <input type="text" class="form-control input-lg" id="search"/>
+      <input type="text" class="form-control input-lg" id="search" />
     </div>
   </form>
 </div>
 <ul id="posts">
   {% for post in site.posts %}
-    <li>
-      <a href="/news/{{ post.url }}">{{ post.title }}</a>
-      - {{post.date}}
-    </li>
+  <li>
+    <a href="/news-archive/{{ post.url }}">{{ post.title }}</a>
+    - {{post.date}}
+  </li>
   {% endfor %}
 </ul>
